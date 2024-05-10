@@ -29,7 +29,8 @@ class StduentAuthController extends GetxController {
                   email: student.email,
                   guardianName: student.guardianName,
                   guardianNumber: student.guardianNumber,
-                  hostelCode: hostelCode)
+                  hostelCode: hostelCode,
+                  studentId: studentId)
               .toMap());
     } on FirebaseAuthException catch (e) {
       String message = "";

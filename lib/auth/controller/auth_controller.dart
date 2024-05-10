@@ -72,19 +72,55 @@ class AuthController extends GetxController {
     }
   }
 
-  //Login hostel warden
-  loginWarden(String email, String password) async {
+  //Login  warden / students as well
+  loginUser(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
-      Get.showSnackbar(
-        GetSnackBar(
-          message: 'Successfully logged in',
-          duration: const Duration(seconds: 4),
-          backgroundColor: Colors.green.shade400,
-        ),
-      );
+      User? user = auth.currentUser;
+      if (user != null) {
+        // Check if user is a warden
+        QuerySnapshot wardenSnapshot = await FirebaseFirestore.instance
+            .collection('hostel-wardens')
+            .where('userId', isEqualTo: user.uid)
+            .get();
+        if (wardenSnapshot.docs.isNotEmpty) {
+          DocumentSnapshot wardenData = wardenSnapshot.docs.first;
+          String wardenId = wardenData.id;
+          // Navigate to warden home screen and pass wardenId
+          Get.offAllNamed('/warden_home_screen',
+              arguments: {'userId': wardenId});
+          Get.showSnackbar(
+            GetSnackBar(
+              message: 'Successfully logged in',
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.green.shade400,
+            ),
+          );
+        }
+      } else {
+        // Check if user is a student
+        QuerySnapshot studentSnapshot = await FirebaseFirestore.instance
+            .collection('students')
+            .where('studentId', isEqualTo: user!.uid)
+            .get();
 
-      Get.offAll(() => const WardenHomeScreen());
+        if (studentSnapshot.docs.isNotEmpty) {
+          // User is a student
+          // Assuming there is only one student per user, get the first document
+          DocumentSnapshot studentData = studentSnapshot.docs.first;
+          String studentId = studentData.id;
+          // Navigate to student home screen and pass studentId
+          Get.offAllNamed('/student_home_screen',
+              arguments: {'studentId': studentId});
+          Get.showSnackbar(
+            GetSnackBar(
+              message: 'Successfully logged in',
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.green.shade400,
+            ),
+          );
+        }
+      }
     } on FirebaseAuthException catch (e) {
       String message = "";
       log(e.code);

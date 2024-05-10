@@ -298,6 +298,7 @@ class _AddingStudentOverlayState extends State<AddingStudentOverlay> {
                     onPressed: () {
                       HostelStudent student = HostelStudent(
                           role: 'student',
+                          studentId: '',
                           name: _nameController.text.trim(),
                           phoneNumber: _phoneController.text.trim(),
                           roomNumber: _roomNumberController.text.trim(),

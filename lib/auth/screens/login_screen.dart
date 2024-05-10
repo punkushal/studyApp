@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
-      await controller.loginWarden(
+      await controller.loginUser(
           emailController.text.trim(), passwordController.text.trim());
     }
   }

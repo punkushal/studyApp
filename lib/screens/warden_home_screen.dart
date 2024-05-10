@@ -39,7 +39,7 @@ class _WardenHomeScreenState extends State<WardenHomeScreen> {
                   height: 60,
                   width: 60,
                   child: CircularProgressIndicator(
-                    color: Colors.white,
+                    color: Colors.blue,
                   ),
                 );
               }
