@@ -50,7 +50,11 @@ class MyApp extends StatelessWidget {
               return const CircularProgressIndicator();
             }
             if (snapshot.hasData && snapshot.data != null) {
-              return const LoginScreen();
+              if (snapshot.data!.uid ==
+                  FirebaseAuth.instance.currentUser!.uid) {
+                return const StudentHomeScreen();
+              }
+              return const WardenHomeScreen();
             } else {
               return const LoginScreen();
             }

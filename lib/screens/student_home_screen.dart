@@ -10,18 +10,7 @@ class StudentHomeScreen extends StatefulWidget {
 }
 
 class _StudentHomeScreenState extends State<StudentHomeScreen> {
-  final studentUserId = Get.arguments['studentId'] as String;
   UserController userController = Get.put(UserController());
-
-  void _onFetchingData() {
-    userController.studentId.value = studentUserId;
-  }
-
-  @override
-  void initState() {
-    _onFetchingData();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -84,11 +84,10 @@ class AuthController extends GetxController {
             .where('userId', isEqualTo: user.uid)
             .get();
         if (wardenSnapshot.docs.isNotEmpty) {
-          DocumentSnapshot wardenData = wardenSnapshot.docs.first;
-          String wardenId = wardenData.id;
+          //  DocumentSnapshot wardenData = wardenSnapshot.docs.first;
+          // String wardenId = wardenData.id;
           // Navigate to warden home screen and pass wardenId
-          Get.offAllNamed('/warden_home_screen',
-              arguments: {'userId': wardenId});
+          Get.offAllNamed('/warden_home_screen');
           Get.showSnackbar(
             GetSnackBar(
               message: 'Successfully logged in',
@@ -96,29 +95,30 @@ class AuthController extends GetxController {
               backgroundColor: Colors.green.shade400,
             ),
           );
-        }
-      } else {
-        // Check if user is a student
-        QuerySnapshot studentSnapshot = await FirebaseFirestore.instance
-            .collection('students')
-            .where('studentId', isEqualTo: user!.uid)
-            .get();
+        } else {
+          // Check if user is a student
+          QuerySnapshot studentSnapshot = await FirebaseFirestore.instance
+              .collection('students')
+              .where('studentId', isEqualTo: user.uid)
+              .get();
 
-        if (studentSnapshot.docs.isNotEmpty) {
-          // User is a student
-          // Assuming there is only one student per user, get the first document
-          DocumentSnapshot studentData = studentSnapshot.docs.first;
-          String studentId = studentData.id;
-          // Navigate to student home screen and pass studentId
-          Get.offAllNamed('/student_home_screen',
-              arguments: {'studentId': studentId});
-          Get.showSnackbar(
-            GetSnackBar(
-              message: 'Successfully logged in',
-              duration: const Duration(seconds: 3),
-              backgroundColor: Colors.green.shade400,
-            ),
-          );
+          if (studentSnapshot.docs.isNotEmpty) {
+            // User is a student
+            // Assuming there is only one student per user, get the first document
+            // DocumentSnapshot studentData = studentSnapshot.docs.first;
+            // String studentId = studentData.id;
+            // Navigate to student home screen and pass studentId
+            Get.offAllNamed(
+              '/student_home_screen',
+            );
+            Get.showSnackbar(
+              GetSnackBar(
+                message: 'Successfully logged in',
+                duration: const Duration(seconds: 3),
+                backgroundColor: Colors.green.shade400,
+              ),
+            );
+          }
         }
       }
     } on FirebaseAuthException catch (e) {

@@ -13,8 +13,7 @@ class UserController extends GetxController {
   HostelWarden? currentUser;
 
   RxBool isLoading = true.obs;
-  final wardenId = Get.arguments['userId'] as String;
-  RxString studentId = RxString('');
+
   HostelStudent? studentUser;
 
   @override
@@ -38,15 +37,15 @@ class UserController extends GetxController {
 
 //To fetch warden data
   void fetchCurrentUserData() async {
-    // String userId = auth.currentUser!.uid;
+    String userId = auth.currentUser!.uid;
     await database
         .collection('hostel-wardens')
-        .doc(wardenId)
+        .doc(userId)
         .get()
         .then((snapshot) {
       if (snapshot.exists) {
         if (auth.currentUser != null) {
-          log(wardenId);
+          log(userId);
           log(snapshot.data()!.toString());
           log('this also execute');
           HostelWarden warden = HostelWarden.fromMap(snapshot.data()!);
@@ -63,14 +62,11 @@ class UserController extends GetxController {
 
 //To fetch currently logged in student data
   void fetchCurrentStudentData() async {
-    await database
-        .collection('students')
-        .doc(studentId.value)
-        .get()
-        .then((snapshot) {
+    String studentId = auth.currentUser!.uid;
+    await database.collection('students').doc(studentId).get().then((snapshot) {
       if (snapshot.exists) {
         if (auth.currentUser != null) {
-          log(studentId.value);
+          log(studentId);
           log(snapshot.data()!.toString());
           log('this also execute');
           HostelStudent student = HostelStudent.fromMap(snapshot.data()!);
